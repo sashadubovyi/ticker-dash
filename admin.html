@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TickerBoard · Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="admin-screen">
+
+  <div class="admin-wrap">
+
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="brand">
+        <span class="brand-glyph">◈</span>
+        <span class="brand-name">TICKER<b>BOARD</b></span>
+      </div>
+      <nav class="admin-nav">
+        <a href="index.html" target="_blank" class="nav-link">
+          <span class="nav-dot"></span> Открыть дисплей
+        </a>
+      </nav>
+    </header>
+
+    <div class="admin-body">
+
+      <!-- API KEY -->
+      <section class="card" id="section-api">
+        <div class="card-head">
+          <h2 class="card-title">API-ключ Polygon.io</h2>
+          <span class="badge" id="api-badge">не задан</span>
+        </div>
+        <div class="api-row">
+          <input
+            id="api-key-input"
+            type="password"
+            class="field"
+            placeholder="Вставьте ваш API-ключ..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button class="btn btn-accent" id="api-toggle-vis" type="button" onclick="Admin.toggleApiVis()">👁</button>
+          <button class="btn btn-accent" type="button" onclick="Admin.saveApiKey()">Сохранить</button>
+        </div>
+        <p class="hint">Ключ хранится в <code>localStorage</code>. Нужен план <b>Stocks Starter</b> или выше на <a href="https://polygon.io" target="_blank">polygon.io</a>.</p>
+        <p class="error-msg" id="api-error"></p>
+      </section>
+
+      <!-- ADD TICKER -->
+      <section class="card" id="section-add">
+        <div class="card-head">
+          <h2 class="card-title">Добавить тикер</h2>
+          <span class="counter" id="ticker-count">0 / 10</span>
+        </div>
+        <div class="add-row">
+          <input
+            id="ticker-input"
+            type="text"
+            class="field field-ticker"
+            placeholder="AAPL, TSLA, NVDA…"
+            maxlength="12"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button class="btn btn-accent" type="button" onclick="Admin.addTicker()">＋ Добавить</button>
+        </div>
+        <p class="error-msg" id="ticker-error"></p>
+      </section>
+
+      <!-- TICKER LIST -->
+      <section class="card" id="section-list">
+        <div class="card-head">
+          <h2 class="card-title">Активные тикеры</h2>
+          <button class="btn btn-danger-ghost" type="button" onclick="Admin.clearAll()">✕ Очистить всё</button>
+        </div>
+        <div id="ticker-list" class="ticker-list">
+          <div class="list-empty">Список пуст</div>
+        </div>
+      </section>
+
+      <!-- PREVIEW -->
+      <section class="card" id="section-preview">
+        <div class="card-head">
+          <h2 class="card-title">Предпросмотр сетки</h2>
+          <button class="btn btn-ghost" type="button" onclick="Admin.fetchAll()">↻ Обновить данные</button>
+        </div>
+        <div id="grid-preview" class="grid-preview">
+          <div class="preview-empty">Нет тикеров</div>
+        </div>
+        <p class="hint mt">Данные Extended Hours (Pre-market / After-hours) через Polygon.io</p>
+      </section>
+
+    </div><!-- /admin-body -->
+  </div><!-- /admin-wrap -->
+
+  <script src="script.js"></script>
+  <script>Admin.init();</script>
+</body>
+</html>
