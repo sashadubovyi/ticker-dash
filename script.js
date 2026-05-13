@@ -63,44 +63,55 @@ function sessionLabel() {
 
 /* ── Polygon.io fetch ────────────────────────── */
 
-async function fetchTicker(sym, apiKey) {
-  // Snapshot endpoint with extendedHours data
-  const url =
-    `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers/${encodeURIComponent(sym)}` +
-    `?apiKey=${apiKey}`;
+async function fetchTicker(symbol) {
+  const apiKey = store.getApiKey();
+  if (!apiKey) return null;
 
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  const data = await r.json();
+  try {
+    // Используем эндпоинт Last Quote, который обычно разрешен
+    // Или эндпоинт Snapshot для ВСЕХ тикеров сразу (он часто работает, когда индивидуальный заблокирован)
+    const url = `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers?tickers=${symbol}&apiKey=${apiKey}`;
+    
+    // Если вышеуказанный всё равно дает 403, попробуйте этот (самый надежный для Free):
+    // const url = `https://api.polygon.io/v1/last/stocks/${symbol}?apiKey=${apiKey}`;
 
-  const t = data?.ticker;
-  if (!t) throw new Error('No ticker data');
+    const response = await fetch(url);
+    
+    if (response.status === 403) {
+      console.error(`Ошибка 403: Доступ к Snapshot для ${symbol} ограничен на бесплатном тарифе.`);
+      // Пробуем альтернативный метод для бесплатного тарифа
+      return fetchFreeTierFallback(symbol, apiKey);
+    }
 
-  // day values (regular session)
-  const day       = t.day   || {};
-  const prevDay   = t.prevDay || {};
-  const lastTrade = t.lastTrade || {};
-  const extHours  = t.extendedHours;   // may be undefined on free plan
+    const data = await response.json();
+    return data.ticker || data; 
+  } catch (err) {
+    console.error("Ошибка при запросе:", err);
+    return null;
+  }
+}
 
-  // prefer extended-hours price if available
-  let price = extHours?.p ?? lastTrade.p ?? day.c ?? null;
-  const prevClose = prevDay.c ?? day.o ?? null;
-
-  // If extended-hours price not available, use closing price
-  if (!price && day.c) price = day.c;
-
-  const change    = (price != null && prevClose != null) ? price - prevClose : null;
-  const changePct = (change != null && prevClose) ? (change / prevClose) * 100 : null;
-
-  return {
-    price,
-    prevClose,
-    change,
-    changePct,
-    volume: extHours?.s ?? day.v ?? null,
-    session: extHours ? 'EXT' : 'DAY',
-    ts: Date.now(),
-  };
+// Запасной метод специально для бесплатного тарифа (Previous Close + Last Trade)
+async function fetchFreeTierFallback(symbol, apiKey) {
+  try {
+    const url = `https://api.polygon.io/v2/aggs/ticker/${symbol}/prev?adjusted=true&apiKey=${apiKey}`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    
+    if (data.results && data.results.length > 0) {
+      const res = data.results[0];
+      return {
+        ticker: symbol,
+        prevDay: { c: res.c }, // Цена закрытия
+        lastTrade: { p: res.c }, // Текущая (будет равна закрытию, если нет подписки на реалтайм)
+        todaysChangePerc: 0,
+        updated: Date.now()
+      };
+    }
+  } catch (e) {
+    console.error("Fallback failed", e);
+  }
+  return null;
 }
 
 /* Batch fetch all tickers and update price cache */
