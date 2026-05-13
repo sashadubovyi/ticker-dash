@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ticker Display</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="display-screen">
+
+  <div id="empty-state" class="empty-state">
+    <div class="empty-icon">📊</div>
+    <p>Нет активных тикеров</p>
+    <span>Добавьте тикеры через панель администратора</span>
+  </div>
+
+  <div id="ticker-grid" class="ticker-grid"></div>
+
+  <div class="screen-meta">
+    <span id="live-clock"></span>
+    <span class="live-dot"></span>
+    <span>LIVE</span>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    initDisplayScreen();
+  </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Ticker Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="admin-screen">
+
+  <div class="admin-wrapper">
+
+    <header class="admin-header">
+      <div class="admin-logo">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text">TICKER<strong>BOARD</strong></span>
+      </div>
+      <div class="admin-status">
+        <span class="live-dot"></span>
+        <span id="ticker-count">0 / 10 тикеров</span>
+      </div>
+    </header>
+
+    <main class="admin-main">
+
+      <section class="admin-add-section">
+        <h2 class="section-title">Добавить тикер</h2>
+        <div class="add-row">
+          <input
+            id="ticker-input"
+            type="text"
+            class="ticker-input"
+            placeholder="Например: AAPL, TSLA, BTC..."
+            maxlength="12"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button id="add-btn" class="btn btn-add" onclick="adminAddTicker()">
+            <span>＋</span> Добавить
+          </button>
+        </div>
+        <p id="error-msg" class="error-msg"></p>
+      </section>
+
+      <section class="admin-list-section">
+        <div class="list-header">
+          <h2 class="section-title">Активные тикеры</h2>
+          <button class="btn btn-clear" onclick="adminClearAll()">✕ Очистить всё</button>
+        </div>
+
+        <div id="ticker-list" class="ticker-list">
+          <div class="list-empty">Список пуст</div>
+        </div>
+      </section>
+
+      <section class="admin-preview-section">
+        <h2 class="section-title">Предпросмотр сетки</h2>
+        <div id="grid-preview" class="grid-preview"></div>
+        <p class="preview-hint">Откройте <a href="index.html" target="_blank">index.html</a> для полного экрана отображения</p>
+      </section>
+
+    </main>
+
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    initAdminPanel();
+  </script>
+</body>
+</html>
