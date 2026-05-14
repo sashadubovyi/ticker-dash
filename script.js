@@ -29,13 +29,13 @@
    Найдите её в Firebase Console → Project Settings → Your apps
    ──────────────────────────────────────────────────── */
 const FIREBASE_CONFIG = {
-  apiKey:            "",
-  authDomain:        "",
-  databaseURL:       "",   // обязательно: https://YOUR-PROJECT-default-rtdb.firebaseio.com
-  projectId:         "",
-  storageBucket:     "",
-  messagingSenderId: "",
-  appId:             ""
+  apiKey: "AIzaSyBQOmdf7FGEnk2UHA_8CrZhLSeP6BPvVRY",
+  authDomain: "mytickerboard.firebaseapp.com",
+  databaseURL: "https://mytickerboard-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "mytickerboard",
+  storageBucket: "mytickerboard.firebasestorage.app",
+  messagingSenderId: "842033577784",
+  appId: "1:842033577784:web:12f8cfe9e6e93795890bcd"
 };
 
 /* ── Constants ────────────────────────────────────────── */
