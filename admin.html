@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>TickerBoard · Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="admin-screen">
+
+  <div class="adm-wrap">
+
+    <!-- Шапка -->
+    <header class="adm-header">
+      <div class="adm-brand">
+        <span class="adm-glyph">◈</span>
+        <span class="adm-title">TICKER<b>BOARD</b></span>
+      </div>
+      <a href="index.html" target="_blank" class="adm-link-btn">▶ Дисплей</a>
+    </header>
+
+    <!-- Статус Firebase -->
+    <div class="adm-status" id="adm-status">Подключение к Firebase…</div>
+
+    <!-- API Key -->
+    <section class="adm-card">
+      <div class="adm-card-title">FINNHUB API KEY</div>
+      <div class="adm-row">
+        <input
+          id="inp-apikey"
+          type="password"
+          class="adm-input"
+          placeholder="Вставьте токен Finnhub…"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button class="adm-btn adm-btn--icon" onclick="adminToggleKeyVis()">👁</button>
+      </div>
+    </section>
+
+    <!-- Добавление тикера -->
+    <section class="adm-card">
+      <div class="adm-card-title">
+        ТИКЕРЫ
+        <span class="adm-counter" id="adm-count">0 / 10</span>
+      </div>
+      <div class="adm-row">
+        <input
+          id="inp-ticker"
+          type="text"
+          class="adm-input adm-input--sym"
+          placeholder="AAPL, TSLA…"
+          maxlength="12"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button class="adm-btn adm-btn--add" onclick="adminAddTicker()">＋</button>
+      </div>
+      <p class="adm-error" id="adm-ticker-err"></p>
+    </section>
+
+    <!-- Список тикеров -->
+    <section class="adm-card">
+      <div class="adm-card-title">АКТИВНЫЕ ТИКЕРЫ</div>
+      <div id="adm-ticker-list" class="adm-ticker-list">
+        <div class="adm-list-empty">Список пуст</div>
+      </div>
+    </section>
+
+    <!-- Кнопка сохранения -->
+    <button class="adm-save-btn" id="adm-save-btn" onclick="adminSave()">
+      ☁ Сохранить в Firebase
+    </button>
+
+    <p class="adm-note">
+      После сохранения дисплей обновится автоматически через Realtime Database.
+    </p>
+
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
